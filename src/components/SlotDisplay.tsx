@@ -1,4 +1,4 @@
-import type { Dispatch, Ref, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import type { Restaurant } from '../types'
 import SlotItem from './SlotItem'
 

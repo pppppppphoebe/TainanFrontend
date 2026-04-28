@@ -30,7 +30,7 @@ export async function decelerateSpin(
   setSlots: Dispatch<SetStateAction<Restaurant[]>>
 ) {
   // 減速步長，數值代表延遲毫秒數
-  const speeds = [100, 200, 300, 400, 500, 600, 700]
+  const speeds = [50, 100, 200, 300, 400, 500, 600]
   
   for (let s = 0; s < Math.min(speeds.length, finalSlot.length); s++) {
     await new Promise(resolve => setTimeout(resolve, speeds[s]))

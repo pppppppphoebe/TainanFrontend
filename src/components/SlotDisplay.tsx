@@ -24,28 +24,22 @@ export function startSpin(
   return timer;
 }
 
-// 減速動畫：越來越慢，最後停在 slotQueue
+// 減速動畫：越來越慢，最後停在 finalSlot
 export async function decelerateSpin(
   finalSlot: Restaurant[],
   setSlots: Dispatch<SetStateAction<Restaurant[]>>
 ) {
-  const speeds = [50, 50, 100, 100, 200, 300, 500]
-  const timer = setInterval(async ()=>{
-    for (let s = 0; s < speeds.length; s++) {
-      await new Promise(r => setTimeout(r, speeds[s]))
-      setSlots((prev ) => {
-        return [finalSlot[s], prev[0],prev[1],prev[2],prev[3]];
-      });
-      // setSlots([
-      //   slotQueue[s % 5],
-      //   slotQueue[(s + 1) % 5],
-      //   slotQueue[(s + 2) % 5],
-      //   slotQueue[(s + 3) % 5],
-      //   slotQueue[(s + 4) % 5]
-      // ])
-    }
-  });
-  return timer;
+  // 減速步長，數值代表延遲毫秒數
+  const speeds = [100, 200, 300, 400, 500, 600, 700]
+  
+  for (let s = 0; s < Math.min(speeds.length, finalSlot.length); s++) {
+    await new Promise(resolve => setTimeout(resolve, speeds[s]))
+    setSlots((prev) => {
+      // 確保至少有 4 個元素可以偏移
+      const base = prev.length >= 4 ? prev.slice(0, 4) : prev
+      return [finalSlot[s], ...base]
+    })
+  }
 }
 // ===== SlotDisplay 元件 =====
 

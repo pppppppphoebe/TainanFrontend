@@ -40,7 +40,7 @@ export default function SlotMachine() {
     const handleSpin = async () => {
         setSpinBtnDisable(true)
         if (spinTimer.current) clearInterval(spinTimer.current)
-        const slotdata = await fetchMultipleRestaurants(15)
+        const slotdata = await fetchMultipleRestaurants(22)
         slotWheel.current = slotdata.slice(0,14)
         finalData.current = slotdata.slice(15)
         setGameState('rolling')
@@ -51,12 +51,15 @@ export default function SlotMachine() {
     // 按鈕停止事件
     const handleStop = async () => {
         setSpinBtnDisable(true)
-        if (spinTimer.current) clearInterval(spinTimer.current)
+        if (spinTimer.current) {
+            clearInterval(spinTimer.current)
+            spinTimer.current = null
+        }
         setGameState('stop_wheel')
-        // 固定取 5 筆結果
-        //const finalData = await fetchMultipleRestaurants(5) 
-        spinTimer.current = await decelerateSpin(finalData.current, setSlots)
-        if (spinTimer.current) clearInterval(spinTimer.current)
+        
+        // 執行減速動畫，直到停止
+        await decelerateSpin(finalData.current, setSlots)
+        
         setGameState('waiting')
         setSpinBtnDisable(false)
     }
